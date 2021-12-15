@@ -25,7 +25,14 @@ public class Verre {
 		if (volume_restant >= 0) {
 			int volume = (int) (Math.random() * 10 + 10); //on boit un volume entre 20 et 10 ml.
 			this.volume_restant = Math.max(0, this.volume_restant - volume);
-			System.out.println("Hmm c'est bon.");
+			System.out.println("(Vous prenez une gorgée pleine de saveur)\n");
+			try {
+				Thread.sleep(1000);
+				System.out.println("Vous : Hmm c'est bon.\n");
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			if (volume_restant == 0) {
 				System.out.println("Ah j'ai fini !");
 				return true;

@@ -1,4 +1,4 @@
 package interfaces;
 
-public interface Melange {
+public interface Melange extends Cepage {
 }

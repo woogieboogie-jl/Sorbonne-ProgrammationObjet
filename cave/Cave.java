@@ -1,5 +1,7 @@
 package cave;
 
+import java.util.Random;
+
 import exceptions.ExcesCapaciteException;
 import exceptions.StockFiniException;
 import vins.Vin;
@@ -16,7 +18,7 @@ public class Cave {
 	
 	public static Cave getInstance() {
 		return INSTANCE;
-		}
+	}
 	
 	public void ajouterCaisse(Caisse c) throws ExcesCapaciteException {
 		if (nb_caisses >= caisses.length) {
@@ -24,6 +26,62 @@ public class Cave {
 		}
 		caisses[nb_caisses] = c;
 		nb_caisses++;
+	}
+	
+	public int getNbVins() {
+		int nb = 0;
+		for (int i = 0; i < nb_caisses; i++) {
+			nb += caisses[i].getNbVins();
+		}
+		return nb;
+	}
+	
+	//ajout
+	public static String genererMessage(String couleur) {
+		Random r = new Random();
+		float probabilite = r.nextFloat();
+		if (probabilite <= 0.25)
+			return "Un beau et scintillant vin " + couleur + ".";
+		else if (probabilite <= 0.5 && probabilite >= 0.25)
+			return "Il vous fera découvrir un monde " + couleur +" et pur.";
+		else if (probabilite >= 0.5 && probabilite <= 0.75)
+			return "Classique, bon, ce vin vous fera voir tout "+couleur+".";
+		else if (probabilite >= 0.75 && probabilite <= 0.9)
+			return "Ce vin "+couleur+" vous fera renaître de vos cendres.";
+		return "Inspirez un coup et détendez devant cette océan "+couleur+" que vous offre cette merveille.";
+	}
+	
+	//ajout
+	public void afficherSelection() {
+		Vin[] selection = this.getSelection();
+		StringBuilder sb = new StringBuilder();
+		for (int y = 0; y < 3; y++) {
+			for (int i = 0; i < selection.length; i++) {
+				String espace = "\t";
+				if (selection[i].getNom().length() <= 6)
+					espace += "\t";
+				if (y==0)
+					sb.append("| " + selection[i].getNom()+" ("+(i+1)+")" + espace);
+				else if (y==1)
+					sb.append("| Vient de " + selection[i].getRegion()+"\t");
+				else if (y==2)
+					sb.append("| Daté de " + selection[i].getAnnee()+"\t\t");
+			}
+			sb.append("\n");
+		}
+		System.err.println(sb);
+	}
+	public Vin[] getSelection() {
+		Vin[] liste = new Vin[this.getNbVins()];
+		int i = 0;
+		for (int k = 0; k < nb_caisses; k++) {
+			Caisse c = caisses[k];
+			for (Vin v : c.getTousVins()) {
+				liste[i] = v;
+				i++;
+			}
+		}
+		return liste;
 	}
 	
 	public Vin trouverVin(Vin v) throws StockFiniException {

@@ -1,5 +1,5 @@
 package interfaces;
 
-public interface PinotNoir {
+public interface PinotNoir extends Cepage {
 
 }
