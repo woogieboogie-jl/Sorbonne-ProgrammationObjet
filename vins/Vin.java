@@ -12,14 +12,16 @@ public abstract class Vin {
 	protected String region;
 	protected int annee;
 	protected String nom;
+	protected final String couleur; //ajout
 	private static final float MINIMUM_VOLUME = 750;
 	
-	protected Vin(float volume, String nom, float prix, String region, int annee) {
+	protected Vin(float volume, String nom, float prix, String region, int annee, String couleur) {
 		this.volume=volume;
 		this.prix=prix;
 		this.nom=nom;
 		this.region=region;
 		this.annee=annee;
+		this.couleur=couleur;
 	}
 	
 	//méthodes d'action
@@ -36,9 +38,12 @@ public abstract class Vin {
 		}
 	}
 	
-	
-	public boolean estVin(Vin v) {
-		return v.getAnnee() == this.annee && v.getPrix() == this.getPrix() && v.getVolume() == this.getVolume();
+	 /**
+	  * @param v : vin dont on cherche l'équivalent
+	  * @return true si on trouve un vin équivalent c'est-à-dire que ce sont les memes vins à l'exception du volume et le prix
+	  */
+	public boolean estEquivalent(Vin v) { //ajout
+		return v.getNom().equals(v.getNom()) && v.getAnnee() == this.getAnnee() && v.getRegion().equals(v.getRegion());
 	}
 	
 	public abstract Vin clone();
@@ -50,6 +55,11 @@ public abstract class Vin {
 		return this.volume;
 	}
 	
+	//ajout
+	public String getCouleur() {
+		return this.couleur;
+	}
+	
 	public static float getMinimumVolume() {
 		return MINIMUM_VOLUME;
 	}
@@ -57,12 +67,18 @@ public abstract class Vin {
 	public float getPrix() {
 		return this.prix;
 	}
+	
 	public int getAnnee() {
 		return this.annee;
 	}
 	
+	//ajout
+	public String getRegion() {
+		return this.region;
+	}
+	
 	public String toString() { //on ne dit pas le prix c'est une surprise
-		return "- " + this.nom + " " + this.region + " " + this.annee;
+		return this.nom + " " + this.region + " de " + this.annee;
 	}
 	
 }

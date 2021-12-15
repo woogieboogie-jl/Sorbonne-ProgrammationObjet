@@ -1,5 +1,5 @@
 package interfaces;
 
-public interface Petillant {
+public interface Petillant extends Cepage {
 		public void champagne();
 }

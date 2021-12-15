@@ -1,5 +1,5 @@
 package interfaces;
 
-public interface Merlot {
+public interface Merlot extends Cepage {
 
 }
