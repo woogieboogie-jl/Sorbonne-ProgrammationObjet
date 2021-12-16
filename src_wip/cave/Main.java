@@ -1,8 +1,11 @@
 package cave;
 
+import java.rmi.UnexpectedException;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 import exceptions.ExcesCapaciteException;
+import vins.ChateauDEsclans;
 import vins.DomPerignon;
 import vins.PerrierJouet;
 import vins.Petrus;
@@ -28,6 +31,7 @@ public class Main {
 			c2.ajouter(new Petrus(Vin.getMinimumVolume() + 100, 15000, 1865));
 			c2.ajouter(new PerrierJouet(Vin.getMinimumVolume() + 100, 1500, 1994));
 			c2.ajouter(new PerrierJouet(Vin.getMinimumVolume() + 50, 3000, 1984));
+			c2.ajouter(new ChateauDEsclans(Vin.getMinimumVolume() + 50, 30000, 1974));
 			
 			cave.ajouterCaisse(c1);
 			cave.ajouterCaisse(c2);
@@ -88,8 +92,34 @@ public class Main {
 				//on demande l'entrée à l'utilisateur
 				entree = scanner.nextInt();
 				if (entree == 1) {
-					System.out.println("Bien-sur voici nos vins :\n");
-					System.out.println(cave.toString()); //ajouter les $$$
+					try {
+						System.out.println("Nous considerons les cépages les plus importantes, et nous avons trois");
+						while (true) {
+							System.out.println("1: Chardonnay\n2: Merlot\n3: Pinot Noir");
+							System.out.print("\nChoisisez-vous un cépage de votre choix:");
+							int entree_cepage = scanner.nextInt();
+							
+							if (entree_cepage > 3 || entree_cepage < 1) {
+								System.out.println("Veuillez-nous pardonner " + nom + ", que désirez-vous ?");	
+							} else {
+								ArrayList<Vin> vin_liste = cave.getSelectionCepage(entree_cepage-1);
+								System.out.println("\n\nBien-sur, voici nos vins special juste pour vous:\n\n");
+								System.out.println("-------------------------------------------------------------");
+								System.out.println(" 'Chateau'              'Region'     'Annee'      'Prix' ");
+								System.out.println("-------------------------------------------------------------");
+								for (int i=0; i<vin_liste.size(); i++) {
+									System.out.println(vin_liste.get(i).toString());
+								}
+								System.out.print("\n\n\n");
+								break;
+							}
+						}
+					} catch (Exception e) {
+						System.out.println("Veuillez-nous pardonner " + nom + ", que désirez-vous ?");
+						e.printStackTrace();
+						scanner.next(); //reinitialise le scanner
+					}
+
 				} else if (entree == 2) {
 					//random recommendation selon le budget
 				} else if (entree == 3) {

@@ -1,11 +1,10 @@
 package vins;
 
 import interfaces.Chardonnay;
-import interfaces.Melange;
 import interfaces.Petillant;
 import interfaces.PinotNoir;
 
-public class PerrierJouet extends VinBlanc implements Chardonnay, PinotNoir, Melange, Petillant {
+public class PerrierJouet extends VinBlanc implements Chardonnay, PinotNoir, Petillant {
 
 	public PerrierJouet(float volume, float prix, int annee) {
 		super(volume, "Perrier Jouet", prix, "Epemay", annee);

@@ -1,10 +1,16 @@
 package cave;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import exceptions.ExcesCapaciteException;
 import exceptions.StockFiniException;
 import vins.Vin;
+
+import interfaces.Merlot;
+import interfaces.Chardonnay;
+import interfaces.PinotNoir;
+
 
 public class Cave {
 	private Caisse[] caisses;
@@ -83,6 +89,31 @@ public class Cave {
 		}
 		return liste;
 	}
+
+	public ArrayList<Vin> getSelectionCepage(int index) {
+
+		Vin[] liste = this.getSelection();
+		ArrayList<Vin>[] tabcepage = new ArrayList[3];
+		for (int k=0; k<tabcepage.length; k++) {
+			tabcepage[k] = new ArrayList<Vin>();
+		}
+
+
+		for (int i=0; i<liste.length; i++) {
+			Vin vin = liste[i];
+			if (vin instanceof Chardonnay) {
+				tabcepage[0].add(vin);
+			} else if (vin instanceof Merlot) {
+				tabcepage[1].add(vin);
+			} else if (vin instanceof PinotNoir) {
+				tabcepage[2].add(vin);
+			}
+		}
+
+		return tabcepage[index];
+	}
+
+
 	
 	public Vin trouverVin(Vin v) throws StockFiniException {
 		for (Caisse c : caisses) {
@@ -121,4 +152,7 @@ public class Cave {
 		}
 		return false;
 	}
+
+	
+
 }

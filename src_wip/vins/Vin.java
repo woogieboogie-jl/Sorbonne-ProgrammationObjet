@@ -1,6 +1,8 @@
 package vins;
 
 import exceptions.PlusDeVolumeException;
+import interfaces.Merlot;
+import interfaces.PinotNoir;
 
 public abstract class Vin {
 	/**
@@ -68,6 +70,14 @@ public abstract class Vin {
 		return this.prix;
 	}
 	
+	public String getPrixSymbol() {
+		prix = this.getPrix();
+		if ( prix < 1000 ) { return "$"; }
+		else if ( prix < 10000 ) {return "$$"; }
+		else { return "$$$"; }
+	}
+
+	
 	public int getAnnee() {
 		return this.annee;
 	}
@@ -77,8 +87,9 @@ public abstract class Vin {
 		return this.region;
 	}
 	
-	public String toString() { //on ne dit pas le prix c'est une surprise
-		return this.nom + " " + this.region + " de " + this.annee;
+	public String toString() {
+		//on ne dit pas le prix mais juste le symbol, ça serait une surprise
+		return "- " + String.format("%-20s", this.nom) + " | " + String.format("%-10s", this.region) + " | " + String.format("%-6s", this.annee) + "       " + this.getPrixSymbol();
 	}
 	
 }
