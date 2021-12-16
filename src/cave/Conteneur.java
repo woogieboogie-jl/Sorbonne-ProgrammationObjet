@@ -5,9 +5,9 @@ import exceptions.PlusDeVolumeException;
 import vins.Vin;
 
 public abstract class Conteneur {
-	protected int capacite;
+	protected float capacite;
 	
-	public Conteneur(int capacite) {
+	public Conteneur(float capacite) {
 		this.capacite=capacite;
 	}
 	
@@ -16,7 +16,7 @@ public abstract class Conteneur {
 	public abstract void vider();
 	
 	//accesseurs
-	public int getCapacite() {
+	public float getCapacite() {
 		return capacite;
 	}
 }

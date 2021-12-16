@@ -1,6 +1,8 @@
 package vins;
 
 import exceptions.PlusDeVolumeException;
+import interfaces.Merlot;
+import interfaces.PinotNoir;
 
 public abstract class Vin {
 	/**
@@ -12,14 +14,16 @@ public abstract class Vin {
 	protected String region;
 	protected int annee;
 	protected String nom;
+	protected final String couleur;
 	private static final float MINIMUM_VOLUME = 750;
 	
-	protected Vin(float volume, String nom, float prix, String region, int annee) {
+	protected Vin(float volume, String nom, float prix, String region, int annee, String couleur) {
 		this.volume=volume;
 		this.prix=prix;
 		this.nom=nom;
 		this.region=region;
 		this.annee=annee;
+		this.couleur=couleur;
 	}
 	
 	//méthodes d'action
@@ -36,18 +40,38 @@ public abstract class Vin {
 		}
 	}
 	
-	
-	public boolean estVin(Vin v) {
-		return v.getAnnee() == this.annee && v.getPrix() == this.getPrix() && v.getVolume() == this.getVolume();
+	 /**
+	  * @param v : vin dont on cherche l'équivalent
+	  * @return true si on trouve un vin équivalent c'est-à-dire que ce sont les memes vins à l'exception du volume et le prix
+	  */
+	public boolean estEquivalent(Vin v) {
+		return v.getNom().equals(v.getNom()) && v.getAnnee() == this.getAnnee() && v.getRegion().equals(v.getRegion());
 	}
 	
 	public abstract Vin clone();
+
+	//définisseurs
+	public void setVolume(float volume) {
+        this.volume = volume;
+    }
+
+    public void setPrix(float prix) {
+        this.prix = prix;
+    }
+
+    public void setAnnee(int annee) {
+        this.annee = annee;
+    }
 	
 	//accesseurs
 	public String getNom() { return this.nom; }
 	
 	public float getVolume() {
 		return this.volume;
+	}
+	
+	public String getCouleur() {
+		return this.couleur;
 	}
 	
 	public static float getMinimumVolume() {
@@ -57,24 +81,32 @@ public abstract class Vin {
 	public float getPrix() {
 		return this.prix;
 	}
-
-	public String getPrixSymbol() {
+	
+	/*
+	* Retourne l'estimation en symboles ($) du prix du vin
+	*/
+	public String getEstimationSymbole() {
 		prix = this.getPrix();
 		if ( prix < 1000 ) { return "$"; }
 		else if ( prix < 10000 ) {return "$$"; }
 		else { return "$$$"; }
 	}
 
+	
 	public int getAnnee() {
 		return this.annee;
 	}
 	
-	public String toString() { //on ne dit pas le prix mais juste le symbol, ça serait une surprise
-		return "- " + String.format("%-20s", this.nom) + " | " + String.format("%-10s", this.region) + " | " + String.format("%-6s", this.annee) + "       " + this.getPrixSymbol();
-	}
-	
-	public String toStringRecommendation() { //on ne dit pas le prix mais juste le symbol, ça serait une surprise
-		return this.nom+ " " +this.region + " " +this.annee;
+	public String getRegion() {
+		return this.region;
 	}
 
+    //Affichage du vin au format spécial pour la carte
+    public String affichageCarte() {
+        return "- " + String.format("%-20s", this.nom) + " | " + String.format("%-10s", this.region) + " | " + String.format("%-6s", this.annee) + "       " + this.getEstimationSymbole();
+    }
+
+	public String toString() {
+        return this.nom + " de " + this.region + " daté de " + this.annee;
+    }
 }

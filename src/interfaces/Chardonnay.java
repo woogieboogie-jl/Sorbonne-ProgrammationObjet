@@ -1,5 +1,5 @@
 package interfaces;
 
-public interface Chardonnay {
+public interface Chardonnay extends Cepage {
 
 }

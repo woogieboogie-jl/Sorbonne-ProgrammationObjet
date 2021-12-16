@@ -1,10 +1,16 @@
 package cave;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import exceptions.ExcesCapaciteException;
 import exceptions.StockFiniException;
 import vins.Vin;
+
+import interfaces.Merlot;
+import interfaces.Chardonnay;
+import interfaces.PinotNoir;
+
 
 public class Cave {
 	private Caisse[] caisses;
@@ -18,7 +24,7 @@ public class Cave {
 	
 	public static Cave getInstance() {
 		return INSTANCE;
-		}
+	}
 	
 	public void ajouterCaisse(Caisse c) throws ExcesCapaciteException {
 		if (nb_caisses >= caisses.length) {
@@ -28,6 +34,127 @@ public class Cave {
 		nb_caisses++;
 	}
 	
+	/*
+	* Retourne un message généré aléatoirement qui fait un commentaire avec la couleur du vin
+	*/
+	public static String genererMessage(String couleur) {
+		Random r = new Random();
+		float probabilite = r.nextFloat();
+		if (probabilite <= 0.25)
+			return "Un beau et scintillant vin " + couleur + ".";
+		else if (probabilite <= 0.5 && probabilite >= 0.25)
+			return "Il vous fera découvrir un monde " + couleur +" et pur.";
+		else if (probabilite >= 0.5 && probabilite <= 0.75)
+			return "Classique, bon, ce vin vous fera voir tout "+couleur+".";
+		else if (probabilite >= 0.75 && probabilite <= 0.9)
+			return "Ce vin "+couleur+" vous fera renaître de vos cendres.";
+		return "Inspirez un coup et détendez devant cette océan "+couleur+" que vous offre cette merveille.";
+	}
+
+	public int getNbVins() {
+		int nb = 0;
+		for (int i = 0; i < nb_caisses; i++) {
+			nb += caisses[i].getNbVins();
+		}
+		return nb;
+	}
+
+    /*
+    * Retourne le vin le moins cher parmi les caisses de vins de la cave
+    */
+	public float getPrixVinMinimum() {
+        float budget = 0;
+        for (int i=0; i<nb_caisses; i++) {
+            if (i==0) {
+                budget = caisses[i].getPrixMinVin();
+            } else {
+                if (caisses[i].getPrixMinVin() < budget) {
+                    budget = caisses[i].getPrixMinVin();
+                }
+            }
+        }
+        return budget;
+    }
+	
+	/*
+	* Retourne un vin aléatoire tel que son prix soit dans le budget passé en argument
+	*/
+	public Vin getRecommendation(int budget) {
+        ArrayList<Vin> vins_budget_cave = new ArrayList<Vin>();
+        for (int i=0; i<nb_caisses; i++) {
+            ArrayList<Vin> vins_budget_caisse = caisses[i].getVinsBudget(budget);
+            vins_budget_cave.addAll(vins_budget_caisse);
+        }
+        int recommendation_numb = (int) (Math.random() * vins_budget_cave.size());
+        return vins_budget_cave.get(recommendation_numb);
+    }
+
+	/*
+	* Affiche tous les vins selon un format spécifique
+	*/
+	public void afficherSelection() {
+		Vin[] selection = this.getSelection();
+		StringBuilder sb = new StringBuilder();
+		for (int y = 0; y < 3; y++) {
+			for (int i = 0; i < selection.length; i++) {
+				String espace = "\t";
+				if (selection[i].getNom().length() <= 6)
+					espace += "\t";
+				if (y==0)
+					sb.append("| " + selection[i].getNom()+" ("+(i+1)+")" + espace);
+				else if (y==1)
+					sb.append("| Vient de " + selection[i].getRegion()+"\t");
+				else if (y==2)
+					sb.append("| Daté de " + selection[i].getAnnee()+"\t\t");
+			}
+			sb.append("\n");
+		}
+		System.err.println(sb);
+	}
+
+	/*
+	* Retourne un tableau de tous les vins de la cave
+	*/
+	public Vin[] getSelection() {
+		Vin[] liste = new Vin[this.getNbVins()];
+		int i = 0;
+		for (int k = 0; k < nb_caisses; k++) {
+			Caisse c = caisses[k];
+			for (Vin v : c.getTousVins()) {
+				liste[i] = v;
+				i++;
+			}
+		}
+		return liste;
+	}
+
+    /*
+    * Retourne une tableau d'ArrayList de vins triés selon leur cépage
+    */
+	public ArrayList<Vin> getSelectionCepage(int index) {
+		Vin[] liste = this.getSelection();
+		ArrayList<Vin>[] tabcepage = new ArrayList[3];
+		for (int k=0; k<tabcepage.length; k++) {
+			tabcepage[k] = new ArrayList<Vin>();
+		}
+
+		for (int i=0; i<liste.length; i++) {
+			Vin vin = liste[i];
+			if (vin instanceof Chardonnay) {
+				tabcepage[0].add(vin);
+			} else if (vin instanceof Merlot) {
+				tabcepage[1].add(vin);
+			} else if (vin instanceof PinotNoir) {
+				tabcepage[2].add(vin);
+			}
+		}
+
+		return tabcepage[index];
+	}
+	
+	/*
+	* Trouve le vin parmi les caisses de la cave
+	*/
 	public Vin trouverVin(Vin v) throws StockFiniException {
 		for (Caisse c : caisses) {
 			Vin vinTrouve = c.recupererVin(v);
@@ -37,23 +164,20 @@ public class Cave {
 		}
 		throw new StockFiniException();
 	}
-	
-	public String toString() {
-		String s = "";
-		for (Caisse c : caisses) {
-			if (c != null)
-				s+=c.toString()+"\n";
-		}
-		return s;
-	}
 
-	public int getNbVins() {
-		int nb_vins = 0;
-		for (int i=0; i<nb_caisses; i++) {
-			nb_vins += caisses[i].getNbVins();
-		}
-		return nb_vins;
-	}
+	/*
+	* Affichage pour la carte de vins utilisée par la fonction affichageCarte de la classe Vin
+	*/
+    public String afficherCarte(ArrayList<Vin> vin_liste) {
+        String s = "\n\nBien-sûr, voici nos vins speciaux ramenés juste pour vous : \n\n";
+        s += "\n-------------------------------------------------------------";
+        s += "\n 'Château'              'Région'     'Année'      'Prix' ";
+        s += "\n-------------------------------------------------------------";
+        for (int i=0; i<vin_liste.size(); i++) {
+            s += "\n" + vin_liste.get(i).affichageCarte();
+        }
+        return s;
+    }
 	
 	/**
 	 * 
@@ -74,29 +198,14 @@ public class Cave {
 		return false;
 	}
 
-	public Vin getRecommendation(int budget) {
-		ArrayList<Vin> vins_budget_cave = new ArrayList<Vin>();
-		for (int i=0; i<nb_caisses; i++){
-			ArrayList<Vin> vins_budget_caisse = caisses[i].getVinsBudget(budget);
-			vins_budget_cave.addAll(vins_budget_caisse);
-		}
-		int recommendation_numb = (int) (Math.random() * vins_budget_cave.size());
-		return vins_budget_cave.get(recommendation_numb);
-	}
 
-	public float getBudget() {
-		float budget = 0;
-		for (int i=0; i<nb_caisses; i++) {
-			if (i==0) {
-				budget = caisses[i].getBudget();
-			} else {
-				if (caisses[i].getBudget() < budget) {
-					budget = caisses[i].getBudget(); 
-				}
-			}
+	public String toString() {
+		String s = "";
+		for (Caisse c : caisses) {
+			if (c != null)
+				s+=c.toString()+"\n";
 		}
-		return budget;
+		return s;
 	}
-
 
 }

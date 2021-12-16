@@ -6,77 +6,76 @@ import exceptions.ExcesCapaciteException;
 import vins.Vin;
 
 public class Caisse extends Conteneur {
-	private Vin[] tab;
-	private int nb_vins;
+	private ArrayList<Vin> tab;
+	//on ne fait pas usage d'un tableau statique car ce serait trop contraignant pour enlever des vins avec les indices
 	
 	public Caisse(int capacite) {
 		super(capacite);
-		this.tab=new Vin[super.capacite];
-		this.nb_vins=0;
+		this.tab = new ArrayList<Vin>();
 	}
 	
 	@Override
 	public void ajouter(Vin v) throws ExcesCapaciteException {
-		if (nb_vins >= super.capacite) {
+		if (tab.size() >= super.capacite) {
 			throw new ExcesCapaciteException();
 		}
-		tab[nb_vins]=v;
-		nb_vins++;
+		tab.add(v);
 	}
 	
 	/**
 	 * @param v : vin passé en argument recherché dans la caisse
 	 * @return vin : le vin trouvé ou null s'il n'a pas été trouvé dans la caisse
 	 */
+	//ajout commentaire
 	public Vin recupererVin(Vin v) {
 		for (Vin vin : tab) {
-			if (vin.estVin(v))
+			if (vin.estEquivalent(v)) //deux vins peuvent etre d'une meme instance mais etre non équivalents
 				return vin;
 		}
 		return null;
 	}
-
-	public Vin recupererVin(int index) {
-		for (int i=0; i < this.getNbVins(); i++) {
-			if ( i==index-1 ){
-				return tab[i];
-			}
-		}
-		return null;
+	
+	public ArrayList<Vin> getTousVins() {
+		return this.tab;
 	}
 	
 	public int getNbVins() {
-		return nb_vins;
+		return tab.size();
 	}
 
-	public ArrayList<Vin> getVinsBudget(int budget) {
-		ArrayList<Vin> vin_budgets = new ArrayList<Vin>();
-		for (int i=0; i<nb_vins; i++) {
-			if (tab[i].getPrix() < budget) {
-				vin_budgets.add(tab[i]);
-			}
-		}
-		return vin_budgets;
-	}
+    /*
+    * Retourne le vin dans la caisse ayant le prix le plus bas
+    */
+	public float getPrixMinVin() {
+        float budget = 0;
+        for (int i=0; i < getNbVins(); i++){
+            if (i ==0) {
+                budget = tab.get(i).getPrix();
+            } else {
+                if (tab.get(i).getPrix() < budget) {
+                    budget = tab.get(i).getPrix();
+                }
+            }
+        }
+        return budget;
+    }
 
-
-	public float getBudget() {
-		float budget = 0;
-		for (int i=0; i < getNbVins(); i++){
-			if (i ==0) {
-				budget = tab[i].getPrix();
-			} else {
-				if (tab[i].getPrix() < budget) {
-					budget = tab[i].getPrix();
-				}
-			}
-		}
-		return budget;
-	}
+    /*
+    * Retourne une ArrayList de vins correspondants au budget passé en paramètre
+    */
+    public ArrayList<Vin> getVinsBudget(int budget) {
+        ArrayList<Vin> vin_budgets = new ArrayList<Vin>();
+        for (int i=0; i<tab.size(); i++) {
+            if (tab.get(i).getPrix() < budget) {
+                vin_budgets.add(tab.get(i));
+            }
+        }
+        return vin_budgets;
+    }
 	
 	@Override
 	public void vider() {
-		this.nb_vins=0;
+		tab.clear(); //supprime tous les vins de tab
 	}
 	
 	public String toString() {
