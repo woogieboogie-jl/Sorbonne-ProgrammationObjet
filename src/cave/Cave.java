@@ -94,20 +94,12 @@ public class Cave {
 	*/
 	public void afficherSelection() {
 		Vin[] selection = this.getSelection();
-		StringBuilder sb = new StringBuilder();
-		for (int y = 0; y < 3; y++) {
-			for (int i = 0; i < selection.length; i++) {
-				String espace = "\t";
-				if (selection[i].getNom().length() <= 6)
-					espace += "\t";
-				if (y==0)
-					sb.append("| " + selection[i].getNom()+" ("+(i+1)+")" + espace);
-				else if (y==1)
-					sb.append("| Vient de " + selection[i].getRegion()+"\t");
-				else if (y==2)
-					sb.append("| Daté de " + selection[i].getAnnee()+"\t\t");
-			}
-			sb.append("\n");
+		String sb = "";
+        	sb += "\n--------------------------------------------------------------------";
+        	sb += "\n 'Château'              'Région'     'Année'      'Prix'   'Numero'";
+        	sb += "\n--------------------------------------------------------------------";
+		for (int i=0; i < selection.length; i++) {
+			sb += "\n" + selection[i].affichageCarte() + "       (" + (i+1) +") " ;		
 		}
 		System.err.println(sb);
 	}
