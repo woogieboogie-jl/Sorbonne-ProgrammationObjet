@@ -125,6 +125,7 @@ public class Cave {
     */
 	public ArrayList<Vin> getSelectionCepage(int index) {
 		Vin[] liste = this.getSelection();
+		System.out.println(liste.length);
 		ArrayList<Vin>[] tabcepage = new ArrayList[3];
 		for (int k=0; k<tabcepage.length; k++) {
 			tabcepage[k] = new ArrayList<Vin>();

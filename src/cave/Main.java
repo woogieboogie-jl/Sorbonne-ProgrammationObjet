@@ -1,6 +1,5 @@
 package cave;
 
-import java.rmi.UnexpectedException;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -18,8 +17,8 @@ public class Main {
 		
 		//Notre cave à vin
 		Cave cave = Cave.getInstance();
-		Caisse c1 = new Caisse(5); //caisse qui contient 5 vins
-		Caisse c2 = new Caisse(5);
+		Caisse c1 = new Caisse(10); //caisse qui contient 5 vins
+		Caisse c2 = new Caisse(10);
 		
 		//paramètres utilisateur
 		int budget = 10000;
@@ -90,8 +89,8 @@ public class Main {
 		}
 		
 		int nb_vins = cave.getNbVins();
-		System.out.println("Bien " + nom + ", nous avons actuellement " + nb_vins + " bouteilles de vin à notre disposition.\n");
-		System.out.println("(Vous avez un budget de "+budget+" euros)\n");
+		System.out.println("\n\n\nBien " + nom + ", nous avons actuellement " + nb_vins + " bouteilles de vin à notre disposition.");
+		System.out.println("(Vous avez un budget de "+budget+" euros)");
 		
 		Vin v_rec = null; //vin recommandé
 
@@ -142,7 +141,7 @@ public class Main {
                             if (entree_budget > cave.getPrixVinMinimum()) {
                                 v_rec = cave.getRecommendation(entree_budget);
                                 System.out.println("\nPour vous, aujourd'hui, nous recommendons le meilleur vin de l'année " + v_rec.getAnnee());
-                                System.out.println("C'est le " + "<<" + v_rec.toString() +">>");
+                                System.out.println("C'est le " + "<<" + v_rec.toString() +">>\n\n\n\n");
                             } else {
                                 System.out.println("Notre selection de vins semble un peu hors de votre portée.\nAugmentez votre budget pour pouvoir goûter nos vins !");
                             }

@@ -87,8 +87,8 @@ public abstract class Vin {
 	*/
 	public String getEstimationSymbole() {
 		prix = this.getPrix();
-		if ( prix < 1000 ) { return "$"; }
-		else if ( prix < 10000 ) {return "$$"; }
+		if ( prix < 1000 ) { return "$  "; }
+		else if ( prix < 10000 ) {return "$$ "; }
 		else { return "$$$"; }
 	}
 
