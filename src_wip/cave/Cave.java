@@ -133,6 +133,18 @@ public class Cave {
 		}
 		return s;
 	}
+
+	// afficher pour carte, utilise la fonction de affichageCarte du class Vin
+	public String afficherCarte(ArrayList<Vin> vin_liste) {
+		String s = "\n\nBien-sur, voici nos vins special juste pour vous:\n\n";
+		s += "\n-------------------------------------------------------------";
+		s += "\n 'Chateau'              'Region'     'Annee'      'Prix' ";
+		s += "\n-------------------------------------------------------------";
+		for (int i=0; i<vin_liste.size(); i++) {
+			s += "\n" + vin_liste.get(i).affichageCarte();
+		}
+		return s;
+	}
 	
 	/**
 	 * 

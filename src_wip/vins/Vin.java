@@ -69,7 +69,7 @@ public abstract class Vin {
 	public float getPrix() {
 		return this.prix;
 	}
-	
+
 	public String getPrixSymbol() {
 		prix = this.getPrix();
 		if ( prix < 1000 ) { return "$"; }
@@ -88,7 +88,10 @@ public abstract class Vin {
 	}
 	
 	public String toString() {
-		//on ne dit pas le prix mais juste le symbol, ça serait une surprise
+		return "- " + this.nom + " " + this.region + " " + this.annee;
+	}
+
+	public String affichageCarte() {
 		return "- " + String.format("%-20s", this.nom) + " | " + String.format("%-10s", this.region) + " | " + String.format("%-6s", this.annee) + "       " + this.getPrixSymbol();
 	}
 	

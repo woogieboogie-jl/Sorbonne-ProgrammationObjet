@@ -103,13 +103,7 @@ public class Main {
 								System.out.println("Veuillez-nous pardonner " + nom + ", que désirez-vous ?");	
 							} else {
 								ArrayList<Vin> vin_liste = cave.getSelectionCepage(entree_cepage-1);
-								System.out.println("\n\nBien-sur, voici nos vins special juste pour vous:\n\n");
-								System.out.println("-------------------------------------------------------------");
-								System.out.println(" 'Chateau'              'Region'     'Annee'      'Prix' ");
-								System.out.println("-------------------------------------------------------------");
-								for (int i=0; i<vin_liste.size(); i++) {
-									System.out.println(vin_liste.get(i).toString());
-								}
+								System.out.println(cave.afficherCarte(vin_liste));
 								System.out.print("\n\n\n");
 								break;
 							}
